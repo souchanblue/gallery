@@ -22,7 +22,7 @@ class GalleryController extends Controller
     // Fungsi untuk menampilkan semua album untuk pengunjung
     public function albums_guest()
     {
-        $albums = Album::with('photos')->paginate(12); // Adjust the pagination as needed
+        $albums = Album::with('photos')->paginate(12);
         return view('albums_guest', compact('albums'));
     }
     
@@ -33,25 +33,20 @@ class GalleryController extends Controller
         $foto = Foto::findOrFail($id);
         return view('show_guest', compact('foto'));
     }
-    
 
     // Fungsi untuk menampilkan detail album bagi pengunjung
     public function album_detail_guest($id)
     {
-        // Ambil album berdasarkan ID dan relasikan dengan foto
+        
         $album = Album::with('fotos')->findOrFail($id);
         
-        // Gunakan paginate untuk foto, agar dapat menggunakan pagination dan method seperti onFirstPage()
-        $fotos = $album->fotos()->paginate(12);  // Tambahkan pagination di sini
-        
+
+        $fotos = $album->fotos()->paginate(12);
         // Kirim album dan foto-foto yang sudah dipaginasi ke view
         return view('album_detail_guest', [
-            'album' => $album,
-            'fotos' => $fotos, // Mengirimkan daftar foto yang sudah dipaginasi
+            'album' => $album, 
+            'fotos' => $fotos,
         ]);
     }
-    
-    
-    
-    
+
 }

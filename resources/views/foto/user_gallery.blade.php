@@ -123,7 +123,7 @@
 
                             @if (!$fotos->onFirstPage())
                                 <span class="page">
-                                    <a href="{{ $fotos->previousPageUrl() }}" rel="prev">‹ Prev</a>
+                                    <a href="{{ $fotos->previousPageUrl() }}" rel="prev">< Prev</a>
                                 </span>
                             @endif
 
@@ -139,7 +139,7 @@
 
                             @if ($fotos->hasMorePages())
                                 <span class="page next">
-                                    <a href="{{ $fotos->nextPageUrl() }}" rel="next">Next 10 ›</a>
+                                    <a href="{{ $fotos->nextPageUrl() }}" rel="next">Next ></a>
                                 </span>
                             @endif
                         </div>

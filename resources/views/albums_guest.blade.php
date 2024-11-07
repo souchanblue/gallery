@@ -56,29 +56,24 @@ $no_footer = true;
 
     <div class="corner-content discography-wrapp">
       <div class="music-list-wrapp">
-    <ol class="music-list list-unstyled" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;">
-      <section style="display: flex; flex-wrap: wrap; gap: 16px; width: 100%;">
-              @forelse($albums as $album)
-                  <div class="album-item" style="flex: 1 1 calc(33.333% - 16px); border-radius: 10px; overflow: hidden; margin-bottom: 16px; position: relative; height: 500px; display: flex; flex-direction: column;">
-                      <a href="{{ route('album_detail_guest', ['id' => $album->AlbumId]) }}" aria-label="{{ $album->NamaAlbum }}" style="display: block; height: 100%;">
-                          <!-- Gambar dengan Ukuran Tetap dan Penyesuaian -->
-                          <div class="music-list-thumb thumb">
-                          <img id="album-photo-{{ $album->AlbumId }}" 
-                               src="{{ asset('storage/' . ($album->fotos->count() > 0 ? $album->fotos->first()->LokasiFile : 'default.jpg')) }}" 
-                               alt="{{ $album->NamaAlbum }}" 
-                               class="img-responsive center-block"
-                               style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.2); border-radius: 10px; transition: all 0.3s;">
-                          </div>
-                          <div class="album-title corner-title" style="position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; z-index: 1">
-                              <h5 class="corner-title-heading" style="margin: 0;">{{ strtoupper($album->NamaAlbum) }}</h5>
-                          </div>
-                      </a>
-                    </div>
-              @empty
-                  <p>Tidak ada album tersedia.</p>
-              @endforelse
-      </section>
-  </ol>
+        <ol class="music-list list-unstyled">
+          @forelse($albums as $album)
+            <li class="music-list-item fadein">
+              <a href="{{ route('album_detail_guest', ['id' => $album->AlbumId]) }}" aria-label="{{ $album->NamaAlbum }}" style="display: block; height: 100%;">
+                <div class="music-list-thumb thumb">
+                  <img id="album-photo-{{ $album->AlbumId }}" alt="{{ $album->NamaAlbum }}" 
+                       class="img-responsive center-block" 
+                       src="{{ asset('storage/' . ($album->fotos->count() > 0 ? $album->fotos->first()->LokasiFile : 'default.jpg')) }}" 
+                       loading="lazy" 
+                       style="width: 100%; height: auto; object-fit: cover;" 
+                       data-index="0" />
+                  <!-- Overlay for Album Title and Description -->
+                  <div class="album-info-overlay">
+                    <h5>{{ strtoupper($album->NamaAlbum) }}</h5>
+                    <p>{{ $album->Deskripsi }}</p>
+                  </div>
+                </div>
+              </a>
 
 
         @if ($albums->total() > 12)

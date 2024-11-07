@@ -36,14 +36,14 @@ public function indexAlbums()
 }
 
 
-    // Menampilkan foto berdasarkan AlbumId
+    // Menampilkan foto
     public function showAlbum($id)
     {
-        // Mengambil data album berdasarkan ID yang diberikan menggunakan AlbumId
+        // Mengambil data album berdasarkan id album
         $album = Album::where('AlbumId', $id)->firstOrFail();
         $album->NamaAlbum = strtoupper($album->NamaAlbum);
     
-        // Mengambil semua foto yang ada di album dengan ID tertentu
+        // Mengambil semua foto yang ada di album dengan id
         $fotos = Foto::where('AlbumId', $id)->with('album', 'user')->paginate(12); // 10 photos per page
     
         // Mengirim data album dan fotos ke view
@@ -51,10 +51,9 @@ public function indexAlbums()
     }
     
 
-// Fungsi untuk menambahkan foto ke dalam database
+// menambahkan foto ke dalam database
 public function store(Request $request)
 {
-    // Validasi input untuk memastikan file gambar sesuai aturan
     $request->validate([
         'LokasiFile' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         'JudulFoto' => 'required|string|max:255',
@@ -62,19 +61,18 @@ public function store(Request $request)
         'AlbumId' => 'required|exists:album,AlbumId'
     ]);
 
-    // Menyimpan file gambar ke direktori 'img' di public storage
     $path = $request->file('LokasiFile')->store('img', 'public');
 
     // Menyimpan data foto dengan TanggalUnggah otomatis
     Foto::create([
-        'LokasiFile' => $path,
-        'JudulFoto' => $request->JudulFoto,
+        'LokasiFile' => $path, // menyimpan file foto yang diunggah dalam kolom LokasiFile di atas
+        'JudulFoto' => $request->JudulFoto, // Mengambil dari input yang di isi
         'DeskripsiFoto' => $request->DeskripsiFoto,
-        'TanggalUnggah' => Carbon::now()->toDateString(),
-        'AlbumId' => $request->AlbumId,
-        'UserId' => Auth::id()
+        'TanggalUnggah' => Carbon::now()->toDateString(), // Mengambil tanggal saat ini menggunakan Carbon dan menyimpannya dalam kolom TanggalUnggah
+        'AlbumId' => $request->AlbumId, // Mengambil AlbumId dari input pengguna dan menyimpannya dalam kolom AlbumId untuk menghubungkan foto dengan album tertentu
+        'UserId' => Auth::id() // Mengambil UserId dari pengguna yang sedang login dan menyimpannya dalam kolom UserId
     ]);
-
+    
     return redirect()->route('foto.user_gallery')->with('success', 'Foto berhasil ditambahkan.');
 }
 
@@ -87,7 +85,6 @@ public function newAlbum()
     // Mengembalikan view dengan variabel $albums
     return view('foto.new_album', compact('albums'));
 }
-
 
 public function storeAlbum(Request $request)
 {
@@ -154,8 +151,6 @@ public function show($id)
     return view('foto.show', compact('foto', 'liked', 'likes'));
 }
 
-
-
     // Menambah atau menghapus like pada foto
     public function like($id)
 {
@@ -184,7 +179,6 @@ public function show($id)
         return redirect()->route('foto.show', ['id' => $id])->with('status', 'liked');
     }
 }
-
 
     // Menampilkan foto yang sudah di-like oleh pengguna
     public function likedPhotos()
@@ -252,7 +246,7 @@ public function update(Request $request, $id)
         // Menghapus foto dari database
         $foto->delete();
 
-        return redirect()->route('foto.user_gallery')->with('success', 'Foto berhasil dihapus.');
+        return back()->with('success', 'Foto berhasil dihapus.');
     }
 
     // Menambahkan komentar pada foto

@@ -15,7 +15,6 @@ Route::middleware('guest')->group(function () {
     Route::get('albums-guest', [GalleryController::class, 'albums_guest'])->name('albums_guest');
     Route::get('show-guest/{id}', [GalleryController::class, 'show_guest'])->name('show_guest');
     Route::get('/album/{id}', [GalleryController::class, 'album_detail_guest'])->name('album_detail_guest');
-    // Route untuk autentikasi
     Route::get('register', [AuthController::class, 'showRegisterForm'])->name('register');
     Route::post('register', [AuthController::class, 'register']);
     Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -23,13 +22,8 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    // Route untuk album
-    Route::get('/album', [AlbumController::class, 'index'])->name('album.index');
-    Route::get('/album/user', [AlbumController::class, 'user'])->name('album.user')->middleware('is_admin');
-    Route::get('/album/{id}/edit', [AlbumController::class, 'edit'])->name('album.edit')->middleware('is_admin');
-    Route::put('/album/{id}', [AlbumController::class, 'update'])->name('album.update')->middleware('is_admin');
-    Route::delete('/album/{id}', [AlbumController::class, 'destroy'])->name('album.destroy')->middleware('is_admin');
-        
+    Route::delete('/album/{id}', [AlbumController::class, 'destroy'])->name('album.destroy');
+
     // Route untuk foto
     Route::get('/foto', [FotoController::class, 'index'])->name('foto.index');
     Route::get('/foto/create', [FotoController::class, 'create'])->name('foto.create');
@@ -54,8 +48,6 @@ Route::middleware('auth')->group(function () {
     // Route untuk menghapus foto
     Route::delete('/foto/{id}', [FotoController::class, 'destroy'])->name('foto.destroy');
 
-    // Route untuk album
-    Route::get('/albums', [AlbumController::class, 'index'])->name('albums.index');
 });
 
 // Route untuk logout

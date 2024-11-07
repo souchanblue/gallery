@@ -85,7 +85,7 @@
 <main class="main container">
     <section class="corner">
         <div class="corner-title">
-            <a href="{{ route('foto.index')}}" class="btn btn-secondary mb-4" style="color: #fff; background: transparent; font-size: 17px; border-radius: 20px; border: 1px solid #fff; position: relative;">Kembali ke Album</a>
+            <a href="{{ route('foto.index')}}" class="btn btn-secondary mb-4" style="color: #fff; background: transparent; font-size: 17px; border-radius: 20px; border: 1px solid #fff; position: relative;">Kembali</a>
             <h2 class="truncate-title corner-title-heading ">{{ $foto->JudulFoto }}</h2>
         </div>
         <article class="corner-content discography-wrapp">

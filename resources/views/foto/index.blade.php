@@ -119,9 +119,6 @@
                     - User
                 @endif
             </h3>
-            @if(auth()->check() && auth()->user()->is_admin == 1)
-            <a class="btn ms-auto" href="{{ route('album.index') }}" style="color: #ffffff; background: transparent; font-size: 15px; border-radius: 20px; border: 1px solid #fff; position: relative;">Lihat Data Album</a>
-            @endif
             </div>
         <div class="corner-tag-sort fadein">
             <div class="tag-list-wrap hidden-xs hidden-sm">
@@ -184,7 +181,7 @@
                                     <a href="{{ $fotos->previousPageUrl() }}" rel="prev">‹ Prev</a>
                                 </span>
                             @else
-                                <span class="page disabled">< Prev</span>
+                                <span class="page disabled"></span>
                             @endif
 
                             @foreach ($fotos->getUrlRange(1, $fotos->lastPage()) as $page => $url)
@@ -199,10 +196,10 @@
 
                             @if ($fotos->hasMorePages())
                                 <span class="page next">
-                                    <a href="{{ $fotos->nextPageUrl() }}" rel="next">Next 10 ></a>
+                                    <a href="{{ $fotos->nextPageUrl() }}" rel="next">Next ></a>
                                 </span>
                             @else
-                                <span class="page disabled">Next 10 ></span>
+                                <span class="page disabled"></span>
                             @endif
                         </div>
                     </div>

@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Album;
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreAlbumRequest;
 use App\Http\Requests\UpdateAlbumRequest;
 
 class AlbumController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        $albums = Album::all();
-        return view('album.index', compact('albums'));
+        $albums = Album::all(); // Mengambil semua data dari model Album
+        return view('album.index', compact('albums')); // Mengirim data albums ke view 'album.index'
     }
+    
 
     public function update(Request $request, $id)
     {
@@ -26,29 +27,38 @@ class AlbumController extends Controller
             'NamaAlbum' => 'required|string|max:255',
             'Deskripsi' => 'nullable|string',
         ]);
-
-        $album = Album::findOrFail($id);
+    
+        $album = Album::findOrFail($id); // Mencari album berdasarkan ID
         $album->update([
-            'NamaAlbum' => $request->NamaAlbum,
-            'Deskripsi' => $request->Deskripsi,
+            'NamaAlbum' => $request->NamaAlbum, // Mengupdate nama album
+            'Deskripsi' => $request->Deskripsi, // Mengupdate deskripsi album, bisa null
         ]);
-
+    
         return redirect()->route('album.index')->with('success', 'Album updated successfully.');
     }
 
-    public function destroy($id)
-    {
-        $album = Album::findOrFail($id);
-        $album->delete();
 
-        return redirect()->route('album.index')->with('success', 'Album deleted successfully.');
+public function destroy($id): RedirectResponse
+{
+    // Temukan album berdasarkan ID
+    $album = Album::with('fotos')->findOrFail($id);
+
+    // Hapus foto terkait terlebih dahulu
+    foreach ($album->fotos as $foto) {
+        // Hapus file foto dari penyimpanan jika ada
+        if (Storage::exists('public/' . $foto->LokasiFile)) {
+            Storage::delete('public/' . $foto->LokasiFile);
+        }
+        $foto->delete(); // Hapus dari database
     }
 
-    public function user()
-    {
-        $users = User::all();  // Get all users
-        return view('album.user', compact('users'));  // Return view with user data
-    }
+    // Hapus album
+    $album->delete();
+
+    // Redirect dengan pesan sukses
+    return redirect()->route('foto.album')->with('success', 'Album berhasil dihapus.');
+}
+    
 
     /**
      * Show the form for creating a new resource.

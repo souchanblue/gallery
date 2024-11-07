@@ -5,81 +5,130 @@
 @section('content')
 
 <style>
+  .music-list-thumb {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .music-list-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    filter: brightness(0.3);
+  }
+
+  .album-info-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+    color: #fff;
+    text-align: center;
+    z-index: 1; /* Memastikan overlay berada di atas gambar */
+  }
+
+  .album-info-overlay h5 {
+    font-size: 17px;
+    margin: 0;
+  }
+
+  .album-info-overlay p {
+    font-size: 14px;
+    margin: 5px 0 0;
+  }
+
   @media (max-width: 768px) {
-      .album-item {
-          flex: 1 1 100% !important;
-          height: 200px;
-      }
+    .album-item {
+      flex: 1 1 100% !important;
+      height: 200px;
+    }
 
-      .album-photo-wrapper {
-          height: 200px;
-      }
+    .album-photo-wrapper {
+      height: 200px;
+    }
 
-      .corner-title h5 {
-          padding-top: 10vh;
-          text-align: center;
-          font-size: 50px;
-      }
+    .corner-title h5 {
+      padding-top: 10vh;
+      text-align: center;
+      font-size: 50px;
+    }
   }
 </style>
 
-  <main class="main container">
-    <section class="details-wrapper">
-      <div class="corner-title">
-        <h1 class="corner-title-heading text-center">ALBUM</h1>
+<main class="main container">
+  <section class="details-wrapper">
+    <div class="corner-title">
+      <h1 class="corner-title-heading text-center">ALBUM</h1>
+    </div>
+
+    <div class="corner-tag-sort fadein">
+      <div class="tag-list-wrap hidden-xs hidden-sm">
+        <ul class="tag-list list-unstyled">
+          <li class="tag-list-item">
+            <a href="{{ route('foto.index') }}">SEMUA</a>
+          </li>
+          <li class="tag-list-item is-active">
+            <a href="{{ route('foto.album') }}">ALBUM</a>
+          </li>
+        </ul>
       </div>
-  
-      <div class="corner-tag-sort fadein">
-        <div class="tag-list-wrap hidden-xs hidden-sm">
-          <ul class="tag-list list-unstyled">
-            <li class="tag-list-item">
-              <a href="{{ route('foto.index') }}">SEMUA</a>
-            </li>
-            <li class="tag-list-item is-active">
-              <a href="{{ route('foto.album') }}">ALBUM</a>
-            </li>
-          </ul>
-        </div>
-        <div class="tag-list-wrap visible-xs visible-sm">
-          <ul class="tag-list list-unstyled">
-            <li class="tag-list-item is-active">
-              <a href="{{ route('foto.index') }}">SEMUA</a>
-            </li>
-            <li class="tag-list-item">
-              <a href="{{ route('foto.album') }}">ALBUM</a>
-            </li>
-          </ul>
-        </div>
+      <div class="tag-list-wrap visible-xs visible-sm">
+        <ul class="tag-list list-unstyled">
+          <li class="tag-list-item is-active">
+            <a href="{{ route('foto.index') }}">SEMUA</a>
+          </li>
+          <li class="tag-list-item">
+            <a href="{{ route('foto.album') }}">ALBUM</a>
+          </li>
+        </ul>
       </div>
-  
-      <div class="corner-content discography-wrapp">
-        <div class="music-list-wrapp">
-      <ol class="music-list list-unstyled" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;">
-        <section style="display: flex; flex-wrap: wrap; gap: 16px; width: 100%;">
-                @forelse($albums as $album)
-                    <div class="album-item" style="flex: 1 1 calc(33.333% - 16px); border-radius: 10px; overflow: hidden; margin-bottom: 16px; position: relative; height: 500px; display: flex; flex-direction: column;">
-                        <a href="{{ route('foto.album.show', ['id' => $album->AlbumId]) }}" aria-label="{{ $album->NamaAlbum }}" style="display: block; height: 100%;">
-                            <!-- Gambar dengan Ukuran Tetap dan Penyesuaian -->
-                            <div class="music-list-thumb thumb">
-                            <img id="album-photo-{{ $album->AlbumId }}" 
-                                src="{{ asset('storage/' . ($album->fotos->count() > 0 ? $album->fotos->first()->LokasiFile : 'default.jpg')) }}" 
-                                alt="{{ $album->NamaAlbum }}" 
-                                class="img-responsive center-block"
-                                style="width: 100%; height: 100%; object-fit: cover; filter: brightness(0.2); border-radius: 10px;">
-                            </div>
-                            <!-- Judul Album di Tengah Gambar -->
-                            <div class="album-title corner-title" style="position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); color: white; text-align: center; z-index: 1">
-                                <h5 class="corner-title-heading" style="margin: 0;">{{ strtoupper($album->NamaAlbum) }}</h5>
-                            </div>
-                        </a>
-                      </div>
-                @empty
-                    <p>Tidak ada album tersedia.</p>
-                @endforelse
-        </section>
-    </ol>
-          <!-- Custom Pagination -->
-          @if ($albums->total() > 12)
+    </div>
+
+    <div class="corner-content discography-wrapp">
+      <div class="music-list-wrapp">
+        <ol class="music-list list-unstyled">
+          @forelse($albums as $album)
+            <li class="music-list-item fadein">
+              <a href="{{ route('foto.album.show', ['id' => $album->AlbumId]) }}" aria-label="{{ $album->NamaAlbum }}" style="display: block; height: 100%;">
+                <div class="music-list-thumb thumb">
+                  <img id="album-photo-{{ $album->AlbumId }}" alt="{{ $album->NamaAlbum }}" 
+                       class="img-responsive center-block" 
+                       src="{{ asset('storage/' . ($album->fotos->count() > 0 ? $album->fotos->first()->LokasiFile : 'default.jpg')) }}" 
+                       loading="lazy" 
+                       style="width: 100%; height: auto; object-fit: cover;" 
+                       data-index="0" />
+                  <!-- Overlay for Album Title and Description -->
+                  <div class="album-info-overlay">
+                    <h5>{{ strtoupper($album->NamaAlbum) }}</h5>
+                    <p>{{ $album->Deskripsi }}</p>
+                  </div>
+                </div>
+              </a>
+
+              @auth
+                @if(auth()->user()->is_admin == 1)
+                  <a href="#" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $album->AlbumId }}').submit();" class="btn mt-5" style="color: #fff; background: transparent; font-size: 17px; border-radius: 20px; border: 1px solid #fff; position: relative;">
+                    Hapus
+                  </a>
+                  <form id="delete-form-{{ $album->AlbumId }}" action="{{ route('album.destroy', ['id' => $album->AlbumId]) }}" method="POST" style="display: none;">
+                    @csrf
+                    @method('DELETE')
+                  </form>
+                @endif
+              @endauth
+            </li>
+          @empty
+            <p>Tidak ada album tersedia.</p>
+          @endforelse
+        </ol>
+        
+        <!-- Custom Pagination -->
+        @if ($albums->total() > 12)
           <div class="paging">
             <div class="pagination">
               @if (!$albums->onFirstPage())
@@ -104,13 +153,10 @@
             </div>
           </div>
         @endif
-            </div>
-          </div>
-        </div>
       </div>
-    </section>
-  </main>
-  
+    </div>
+  </section>
+</main>
 
 @section('scripts')
 <script>
@@ -132,7 +178,7 @@
       }
   }
 
-  setInterval(rotateAlbumPhotos, 1000);
+  setInterval(rotateAlbumPhotos, 3000); // 3 seconds for better viewing experience
 </script>
 @endsection
 

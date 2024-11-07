@@ -80,10 +80,10 @@
 
                         @if ($fotos->hasMorePages())
                             <span class="page next">
-                                <a href="{{ $fotos->nextPageUrl() }}" rel="next">Next 10 ></a>
+                                <a href="{{ $fotos->nextPageUrl() }}" rel="next">Next ></a>
                             </span>
                         @else
-                            <span class="page disabled">Next 10 ›</span>
+                            <span class="page disabled">Next ›</span>
                         @endif
                     </div>
                 </div>
