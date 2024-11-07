@@ -14,30 +14,6 @@ use App\Http\Requests\UpdateAlbumRequest;
 class AlbumController extends Controller
 {
 
-    public function index()
-    {
-        $albums = Album::all(); // Mengambil semua data dari model Album
-        return view('album.index', compact('albums')); // Mengirim data albums ke view 'album.index'
-    }
-    
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'NamaAlbum' => 'required|string|max:255',
-            'Deskripsi' => 'nullable|string',
-        ]);
-    
-        $album = Album::findOrFail($id); // Mencari album berdasarkan ID
-        $album->update([
-            'NamaAlbum' => $request->NamaAlbum, // Mengupdate nama album
-            'Deskripsi' => $request->Deskripsi, // Mengupdate deskripsi album, bisa null
-        ]);
-    
-        return redirect()->route('album.index')->with('success', 'Album updated successfully.');
-    }
-
-
 public function destroy($id): RedirectResponse
 {
     // Temukan album berdasarkan ID

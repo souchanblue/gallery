@@ -25,7 +25,7 @@ class FotoController extends Controller
 // Menampilkan semua album di halaman album dengan foto yang terkait dan pagination
 public function indexAlbums()
 {
-    // Mengambil semua album beserta foto-fotonya dengan pagination
+    // Mengambil semua album dan foto
     $albums = Album::with('fotos')->paginate(12);
     
     foreach ($albums as $album) {

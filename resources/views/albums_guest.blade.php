@@ -7,21 +7,58 @@
 $no_footer = true;
 @endphp
 <style>
+  .music-list-thumb {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .music-list-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    filter: brightness(0.3);
+  }
+
+  .album-info-overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+    color: #fff;
+    text-align: center;
+    z-index: 1; /* Memastikan overlay berada di atas gambar */
+  }
+
+  .album-info-overlay h5 {
+    font-size: 17px;
+    margin: 0;
+  }
+
+  .album-info-overlay p {
+    font-size: 14px;
+    margin: 5px 0 0;
+  }
+
   @media (max-width: 768px) {
-      .album-item {
-          flex: 1 1 100% !important;
-          height: 200px;
-      }
+    .album-item {
+      flex: 1 1 100% !important;
+      height: 200px;
+    }
 
-      .album-photo-wrapper {
-          height: 200px;
-      }
+    .album-photo-wrapper {
+      height: 200px;
+    }
 
-      .corner-title h5 {
-          padding-top: 10vh;
-          text-align: center;
-          font-size: 50px;
-      }
+    .corner-title h5 {
+      padding-top: 10vh;
+      text-align: center;
+      font-size: 50px;
+    }
   }
 </style>
 
@@ -53,7 +90,6 @@ $no_footer = true;
         </ul>
       </div>
     </div>
-
     <div class="corner-content discography-wrapp">
       <div class="music-list-wrapp">
         <ol class="music-list list-unstyled">
@@ -74,6 +110,10 @@ $no_footer = true;
                   </div>
                 </div>
               </a>
+              @empty
+            <p>Tidak ada album tersedia.</p>
+          @endforelse
+        </ol>
 
 
         @if ($albums->total() > 12)

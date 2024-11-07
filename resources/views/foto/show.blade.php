@@ -108,7 +108,7 @@
                                         type="submit"
                                         id="like-btn">
                                         <i class="fas fa-heart"></i><br>
-                                        <span id="like-count">{{ $foto->likes->count() }}</span> <!-- Menampilkan jumlah like -->
+                                        {{-- <span id="like-count">{{ $foto->likes->count() }}</span> --}}
                                     </button>
                                 </form>
                             </div>
