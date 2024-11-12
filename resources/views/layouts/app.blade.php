@@ -72,7 +72,7 @@
                 </nav>
                 <div class="header-menu-fixed">
                     <div class="header-login-btn"></div>
-                    <button type="button" class="btn-modal-menu" data-scroll="false" aria-label="メニュー">
+                    <button type="button" class="btn-modal-menu" data-scroll="false" aria-label=".">
                         <span class="btn-nav-icon-text"></span>
                         <span class="btn-nav-icon btn-nav-icon-top">
                             <span class="btn-nav-icon-line"></span>

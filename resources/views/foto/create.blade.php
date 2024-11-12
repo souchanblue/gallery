@@ -99,21 +99,51 @@ function pratinjauGambar(input) {
             reader.readAsDataURL(input.files[0]);
         }
     }
-        // sweet allert
     function validasiForm() {
-        const fileInput = document.getElementById('foto');
+    const fileInput = document.getElementById('foto');
+    const file = fileInput.files[0];
 
-        if (!fileInput.files || !fileInput.files.length) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Harap unggah foto sebelum mengirim form.',
-                confirmButtonText: 'Tutup'
-            });
-            return false;
-        }
+    // SweetAlert Options
+    const swalOptions = {
+        icon: 'error',
+        confirmButtonText: 'Tutup',
+    };
 
-        return true;
+    // Cek apakah file sudah dipilih
+    if (!fileInput.files || !file) {
+        Swal.fire({
+            ...swalOptions,
+            title: 'Oops...',
+            text: 'Harap unggah foto sebelum mengirim form.',
+        });
+        return false;
     }
+
+    // Cek apakah file adalah gambar (jpeg, png, jpg, gif)
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+        Swal.fire({
+            ...swalOptions,
+            title: 'File Tidak Valid',
+            text: 'Hanya file gambar (jpeg, png, jpg, gif) yang diperbolehkan.',
+        });
+        return false;
+    }
+
+    // Cek ukuran file (maksimum 2MB)
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (file.size > maxSize) {
+        Swal.fire({
+            ...swalOptions,
+            title: 'Ukuran File Terlalu Besar',
+            text: 'Ukuran file tidak boleh lebih dari 2MB.',
+        });
+        return false;
+    }
+
+    // Jika semua validasi lolos
+    return true;
+}
+
 </script>
 @endsection

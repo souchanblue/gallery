@@ -108,7 +108,7 @@
                                         type="submit"
                                         id="like-btn">
                                         <i class="fas fa-heart"></i><br>
-                                        {{-- <span id="like-count">{{ $foto->likes->count() }}</span> --}}
+                                        <span id="like-count">{{ $foto->likes->count() }}</span>
                                     </button>
                                 </form>
                             </div>
@@ -125,7 +125,7 @@
                             </div>
                             <button class="text-start" data-bs-toggle="collapse" data-bs-target="#likeList" aria-expanded="false" aria-controls="likeList" style="background: none; border: none; padding: 0;">
                                 <span style="color: red; text-decoration: underline;"><i class="fas fa-heart"></i></span> 
-                                {{-- <span style="color: red" id="like-count">{{ $foto->likes->count() }}</span>  --}}
+                                <span style="color: red" id="like-count">{{ $foto->likes->count() }}</span> 
                                 <i class="bi bi-chevron-down"></i>
                             </button>
                             <div class="collapse" id="likeList">

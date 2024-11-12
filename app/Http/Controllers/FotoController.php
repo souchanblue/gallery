@@ -44,7 +44,7 @@ public function indexAlbums()
         $album->NamaAlbum = strtoupper($album->NamaAlbum);
     
         // Mengambil semua foto yang ada di album dengan id
-        $fotos = Foto::where('AlbumId', $id)->with('album', 'user')->paginate(12); // 10 photos per page
+        $fotos = Foto::where('AlbumId', $id)->with('album', 'user')->paginate(12);
     
         // Mengirim data album dan fotos ke view
         return view('foto.album_detail', compact('fotos', 'album'));
@@ -59,22 +59,28 @@ public function store(Request $request)
         'JudulFoto' => 'required|string|max:255',
         'DeskripsiFoto' => 'nullable|string',
         'AlbumId' => 'required|exists:album,AlbumId'
+    ], [
+        'LokasiFile.required' => 'File foto wajib diunggah.',
+        'LokasiFile.image' => 'File yang diunggah harus berupa gambar (jpeg, png, jpg, gif).',
+        'LokasiFile.mimes' => 'Jenis file yang diperbolehkan hanya jpeg, png, jpg, dan gif.',
+        'LokasiFile.max' => 'Ukuran file tidak boleh lebih dari 2MB.',
     ]);
 
+    // Mengunggah file dan menyimpan data ke dalam database
     $path = $request->file('LokasiFile')->store('img', 'public');
 
-    // Menyimpan data foto dengan TanggalUnggah otomatis
     Foto::create([
-        'LokasiFile' => $path, // menyimpan file foto yang diunggah dalam kolom LokasiFile di atas
-        'JudulFoto' => $request->JudulFoto, // Mengambil dari input yang di isi
+        'LokasiFile' => $path,
+        'JudulFoto' => $request->JudulFoto,
         'DeskripsiFoto' => $request->DeskripsiFoto,
-        'TanggalUnggah' => Carbon::now()->toDateString(), // Mengambil tanggal saat ini menggunakan Carbon dan menyimpannya dalam kolom TanggalUnggah
-        'AlbumId' => $request->AlbumId, // Mengambil AlbumId dari input pengguna dan menyimpannya dalam kolom AlbumId untuk menghubungkan foto dengan album tertentu
-        'UserId' => Auth::id() // Mengambil UserId dari pengguna yang sedang login dan menyimpannya dalam kolom UserId
+        'TanggalUnggah' => Carbon::now()->toDateString(),
+        'AlbumId' => $request->AlbumId,
+        'UserId' => Auth::id()
     ]);
     
     return redirect()->route('foto.user_gallery')->with('success', 'Foto berhasil ditambahkan.');
 }
+
 
 // Fungsi untuk menampilkan halaman pembuatan album baru
 public function newAlbum()
